@@ -1,8 +1,9 @@
 package entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @Table(name = "usr")
@@ -14,8 +15,21 @@ public class User {
     private String userLastName;
     private String username;
 
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private LinkedList<Note> notes;
+
     public User() {
     }
+
+
+
+//    public LinkedList<Note> getNotes() {
+//        return notes;
+//    }
+//
+//    public void setNotes(LinkedList<Note> notes) {
+//        this.notes = notes;
+//    }
 
     public Long getId() {
         return id;

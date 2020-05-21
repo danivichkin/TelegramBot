@@ -34,7 +34,8 @@ public class Keyboard {
 
         inlineKeyboardMarkup.setKeyboard(Collections.singletonList(keyboardButtonsRow));
 
-        return new SendMessage().setChatId(chatId).setText("Что мы хотим сделать с твоими напоминалками? :3").setReplyMarkup(inlineKeyboardMarkup);
+        return new SendMessage().setChatId(chatId).setText("Что мы хотим сделать с твоими напоминалками? :3")
+                .setReplyMarkup(inlineKeyboardMarkup);
     }
 
     public static SendMessage defaultKeyboard(long chatId){
@@ -43,13 +44,13 @@ public class Keyboard {
         List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
 
         //Back button
-        keyboardButtonsRow.add(new InlineKeyboardButton().setText("Назад")
-                .setCallbackData("/back"));
+        keyboardButtonsRow.add(new InlineKeyboardButton().setText("Отмена")
+                .setCallbackData("/cancel"));
 
 
         inlineKeyboardMarkup.setKeyboard(Collections.singletonList(keyboardButtonsRow));
 
-        return new SendMessage().setChatId(chatId).setText("Создаём новую напоминалку... \n*Введи текст напоминалки")
+        return new SendMessage().setChatId(chatId).setText("Создаём новую напоминалку... \nВведи текст напоминалки:")
                 .setReplyMarkup(inlineKeyboardMarkup);
     }
 

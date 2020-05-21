@@ -19,9 +19,10 @@ public class Bot extends TelegramLongPollingBot {
 
             //Keyboard
             if (update.getMessage().getText().equals("/start")) {
-                UserService.addUser(update.getMessage().getChatId() ,update);
+                long chatId = update.getMessage().getChatId();
+                UserService.addUser(chatId, update);
                 try {
-                    execute(Keyboard.mainKeyboard(update.getMessage().getChatId()));
+                    execute(Keyboard.mainKeyboard(chatId));
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
@@ -43,11 +44,17 @@ public class Bot extends TelegramLongPollingBot {
                         e.printStackTrace();
                     }
 
-
                     break;
                 case "/check":
                     break;
                 case "/delete":
+                    break;
+                case "/cancel":
+                    try {
+                        execute(Keyboard.mainKeyboard(chatId));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }

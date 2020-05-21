@@ -27,12 +27,13 @@ public class UserService {
             user.setUsername(update.getMessage().getFrom().getUserName());
 
             entityManager.persist(user);
+            entityManager.getTransaction().commit();
+            entityManager.close();
+            entityManagerFactory.close();
         }  else {
             System.out.println("Exist");
         }
-        entityManager.getTransaction().commit();
-        entityManager.close();
-        entityManagerFactory.close();
+
 
     }
 
