@@ -1,10 +1,11 @@
 create sequence hibernate_sequence start 1 increment 1;
 
 create table usr(
-    id int4 PRIMARY KEY,
+    id int8 PRIMARY KEY,
     userFirstName varchar,
     userLastName varchar,
-    username varchar
+    username varchar,
+    lastCallBackQuery varchar
     );
 
 
@@ -18,4 +19,4 @@ create table notes(
 
 alter table if exists notes
     add constraint notes_user_fk
-        foreign key (user_id) references usr;
+        foreign key (user_id) references usr(id);

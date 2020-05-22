@@ -1,7 +1,7 @@
+import config.Properties;
+import dao.impl.UserDaoImpl;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import service.Keyboard;
 import service.UserService;
@@ -9,7 +9,7 @@ import service.UserService;
 
 public class Bot extends TelegramLongPollingBot {
 
-    SendMessage message = new SendMessage();
+    UserService userService = new UserService();
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -20,7 +20,8 @@ public class Bot extends TelegramLongPollingBot {
             //Keyboard
             if (update.getMessage().getText().equals("/start")) {
                 long chatId = update.getMessage().getChatId();
-                UserService.addUser(chatId, update);
+                userService.saveUser(chatId, update);
+
                 try {
                     execute(Keyboard.mainKeyboard(chatId));
                 } catch (TelegramApiException e) {
@@ -44,12 +45,18 @@ public class Bot extends TelegramLongPollingBot {
                         e.printStackTrace();
                     }
 
+
+                    userService.updateLastCommand(chatId, update);
                     break;
                 case "/check":
+                    userService.updateLastCommand(chatId, update);
                     break;
                 case "/delete":
+                    userService.updateLastCommand(chatId, update);
                     break;
                 case "/cancel":
+                    userService.updateLastCommand(chatId, update);
+
                     try {
                         execute(Keyboard.mainKeyboard(chatId));
                     } catch (TelegramApiException e) {

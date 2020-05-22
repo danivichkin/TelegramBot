@@ -1,9 +1,7 @@
 package entity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "usr")
@@ -14,22 +12,29 @@ public class User {
     private String userFirstName;
     private String userLastName;
     private String username;
+    private String lastCallBackQuery;
 
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private LinkedList<Note> notes;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Note> notes;
 
     public User() {
     }
 
+    public String getLastCallBackQuery() {
+        return lastCallBackQuery;
+    }
 
+    public void setLastCallBackQuery(String lastCallBackQuery) {
+        this.lastCallBackQuery = lastCallBackQuery;
+    }
 
-//    public LinkedList<Note> getNotes() {
-//        return notes;
-//    }
-//
-//    public void setNotes(LinkedList<Note> notes) {
-//        this.notes = notes;
-//    }
+    public Set<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(Set<Note> notes) {
+        this.notes = notes;
+    }
 
     public Long getId() {
         return id;

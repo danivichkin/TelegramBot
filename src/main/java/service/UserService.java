@@ -1,40 +1,20 @@
 package service;
 
-import entity.User;
+import dao.impl.UserDaoImpl;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 public class UserService {
 
-    public static void addUser(long id ,Update update){
+    UserDaoImpl userDaoImpl = new UserDaoImpl();
 
-        EntityManagerFactory entityManagerFactory  = Persistence.createEntityManagerFactory("UsersDB");
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+    public UserService() {}
 
-        entityManager.getTransaction().begin();
+    public void saveUser(long id, Update update){
+        userDaoImpl.addUser(id, update);
+    }
 
-        User user = entityManager.find(User.class, id);
-
-        if (user == null){
-
-            user = new User();
-            user.setId(update.getMessage().getChatId());
-            user.setUserFirstName(update.getMessage().getFrom().getFirstName());
-            user.setUserLastName(update.getMessage().getFrom().getLastName());
-            user.setUsername(update.getMessage().getFrom().getUserName());
-
-            entityManager.persist(user);
-            entityManager.getTransaction().commit();
-            entityManager.close();
-            entityManagerFactory.close();
-        }  else {
-            System.out.println("Exist");
-        }
-
-
+    public void updateLastCommand(long id, Update update){
+        userDaoImpl.updateCallBackQueryField(id, update);
     }
 
 }
