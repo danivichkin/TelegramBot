@@ -11,8 +11,8 @@ create table usr(
 
 create table notes(
     id int8 primary key ,
-    title varchar,
-    description varchar,
+    title varchar(200),
+    description varchar(200),
     date timestamptz,
     user_id int8
 );

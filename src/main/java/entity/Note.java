@@ -60,4 +60,14 @@ public class Note {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    @Override
+    public String toString() {
+        return "Note{" +
+                "Id=" + Id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", date=" + date +
+                '}';
+    }
 }

@@ -8,6 +8,7 @@ import org.hibernate.Transaction;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import javax.persistence.Query;
+import java.util.List;
 
 
 public class UserDaoImpl implements UserDao {
@@ -48,5 +49,39 @@ public class UserDaoImpl implements UserDao {
 
         transaction.commit();
         session.close();
+    }
+
+    @Override
+    public void setDefaultCallBack(long id, Update update) {
+        Session session = HibernateConfig.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+
+        User user = session.get(User.class, id);
+        user.setLastCallBackQuery("/default");
+        session.update(user);
+
+        transaction.commit();
+        session.close();
+    }
+
+    @Override
+    public User getUserById(long id, Update update) {
+        Session session = HibernateConfig.getSessionFactory().openSession();
+        return session.get(User.class, id);
+    }
+
+    @Override
+    public String getLastCommand(long id, Update update) {
+        Session session = HibernateConfig.getSessionFactory().openSession();
+
+        Query query = session.createQuery("from User user where user.id=:i");
+        query.setParameter("i", id);
+
+        List list = query.getResultList();
+        User user = (User) list.get(0);
+        String lastCommand = user.getLastCallBackQuery();
+
+        session.close();
+        return lastCommand;
     }
 }

@@ -45,12 +45,12 @@ public class Keyboard {
 
         //Back button
         keyboardButtonsRow.add(new InlineKeyboardButton().setText("Отмена")
-                .setCallbackData("/cancel"));
+                .setCallbackData("/menu"));
 
 
         inlineKeyboardMarkup.setKeyboard(Collections.singletonList(keyboardButtonsRow));
 
-        return new SendMessage().setChatId(chatId).setText("Создаём новую напоминалку... \nВведи текст напоминалки:")
+        return new SendMessage().setChatId(chatId).setText("Создаём новую напоминалку... \nВведи текст напоминалки:\nP.S Максимальная длинна 200 символов")
                 .setReplyMarkup(inlineKeyboardMarkup);
     }
 
