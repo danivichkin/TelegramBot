@@ -20,6 +20,8 @@ public class UserService {
 
     public void setDefaultCallBack(long id, Update update){userDaoImpl.setDefaultCallBack(id, update);}
 
+    public void setCustomCallBack(long id, Update update, String customCallBack) {userDaoImpl.setCustomCallBack(id, update, customCallBack);}
+
     public User getUserById(long id, Update update) {return userDaoImpl.getUserById(id, update);}
 
     public String getLastCommand(long id, Update update) { return userDaoImpl.getLastCommand(id, update); }

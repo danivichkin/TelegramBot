@@ -65,6 +65,19 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public void setCustomCallBack(long id, Update update, String customCallBack) {
+        Session session = HibernateConfig.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+
+        User user = session.get(User.class, id);
+        user.setLastCallBackQuery(customCallBack);
+        session.update(user);
+
+        transaction.commit();
+        session.close();
+    }
+
+    @Override
     public User getUserById(long id, Update update) {
         Session session = HibernateConfig.getSessionFactory().openSession();
         return session.get(User.class, id);

@@ -19,4 +19,4 @@ create table notes(
 
 alter table if exists notes
     add constraint notes_user_fk
-        foreign key (user_id) references usr(id);
+        foreign key (user_id) references usr;

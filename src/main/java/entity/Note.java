@@ -63,11 +63,9 @@ public class Note {
 
     @Override
     public String toString() {
-        return "Note{" +
-                "Id=" + Id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", date=" + date +
-                '}';
+        return "Напоминалка №" + Id +
+                "\nНазвание: " + title  +
+                "\nОписание: " + description +
+                "\nДата: " + date;
     }
 }

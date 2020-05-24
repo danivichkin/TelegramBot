@@ -50,7 +50,23 @@ public class Keyboard {
 
         inlineKeyboardMarkup.setKeyboard(Collections.singletonList(keyboardButtonsRow));
 
-        return new SendMessage().setChatId(chatId).setText("Создаём новую напоминалку... \nВведи текст напоминалки:\nP.S Максимальная длинна 200 символов")
+        return new SendMessage().setChatId(chatId).setText("Создаём новую напоминалку \nВведите название напоминалки: ")
+                .setReplyMarkup(inlineKeyboardMarkup);
+    }
+
+    public static SendMessage flagKeyboard(long chatId){
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
+
+        //Back button
+        keyboardButtonsRow.add(new InlineKeyboardButton().setText("Да, сохраняем")
+                .setCallbackData("/saveNote"));
+
+        //Back button
+        keyboardButtonsRow.add(new InlineKeyboardButton().setText("Нет, редактируем")
+                .setCallbackData("/noteEdit"));
+
+        return new SendMessage().setChatId(chatId).setText("Проверяем ещё разок ")
                 .setReplyMarkup(inlineKeyboardMarkup);
     }
 
