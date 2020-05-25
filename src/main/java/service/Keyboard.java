@@ -38,7 +38,7 @@ public class Keyboard {
                 .setReplyMarkup(inlineKeyboardMarkup);
     }
 
-    public static SendMessage defaultKeyboard(long chatId){
+    public static SendMessage defaultKeyboard(long chatId, String message){
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
@@ -50,11 +50,11 @@ public class Keyboard {
 
         inlineKeyboardMarkup.setKeyboard(Collections.singletonList(keyboardButtonsRow));
 
-        return new SendMessage().setChatId(chatId).setText("Создаём новую напоминалку \nВведите название напоминалки: ")
+        return new SendMessage().setChatId(chatId).setText(message)
                 .setReplyMarkup(inlineKeyboardMarkup);
     }
 
-    public static SendMessage flagKeyboard(long chatId){
+    public static SendMessage flagKeyboard(long chatId, String message){
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
 
@@ -66,7 +66,9 @@ public class Keyboard {
         keyboardButtonsRow.add(new InlineKeyboardButton().setText("Нет, редактируем")
                 .setCallbackData("/noteEdit"));
 
-        return new SendMessage().setChatId(chatId).setText("Проверяем ещё разок ")
+        inlineKeyboardMarkup.setKeyboard(Collections.singletonList(keyboardButtonsRow));
+
+        return new SendMessage().setChatId(chatId).setText(message)
                 .setReplyMarkup(inlineKeyboardMarkup);
     }
 

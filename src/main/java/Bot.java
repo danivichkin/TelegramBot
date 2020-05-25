@@ -38,29 +38,41 @@ public class Bot extends TelegramLongPollingBot {
             //Логика комманд (диалог)
             switch (lastCommand) {
 
-                case "/create":
+                case "/createTitle":
+                    note.setTitle(update.getMessage().getText());
+                    userService.setCustomCallBack(chatId, update, "/createDescription");
+
                     try {
-                        execute(Keyboard.defaultKeyboard(chatId)); //"Создаём новую напоминалку \nВведите название напоминалки:
+                        execute(Keyboard.defaultKeyboard(chatId, "Теперь описание напоминалки:"));
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
-                    String title = update.getMessage().getText();
-                    note.setTitle(title);
-                    userService.setCustomCallBack(chatId, update, "/createTitle");
                     break;
 
-                case "/createTitle":
-                    message.setChatId(chatId).setText("Теперь описание напоминалки:");
+                case "/createDescription":
+                    note.setDescription(update.getMessage().getText());
+//                    userService.setCustomCallBack(chatId, update, "/checkNoteBeforeSave");
+
                     try {
-                        execute(message);
-                        execute(Keyboard.defaultKeyboard(chatId));
+                        execute(message.setChatId(chatId).setText("Проверим напоминалку: "));
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
-                    String description = update.getMessage().getText();
-                    note.setDescription(description);
-                    userService.setCustomCallBack(chatId, update, "/checkNoteBeforeSave"); // /createDescription
+
+                    message.setChatId(chatId).setText(note.toString());
+                    try {
+                        execute(message);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        execute(Keyboard.flagKeyboard(chatId, "Cохраняем?"));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
                     break;
+
 /*
                 case "/createData":
                     message.setChatId(chatId).setText("Когда напомнить?");
@@ -83,44 +95,10 @@ public class Bot extends TelegramLongPollingBot {
                     break;
 */
 
-                case "/checkNoteBeforeSave":
-                    try {
-                        execute(Keyboard.flagKeyboard(chatId));
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                    message.setChatId(chatId).setText(note.toString());
-                    try {
-                        execute(message);
-                        execute(Keyboard.flagKeyboard(chatId));
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                    message.setChatId(chatId).setText("");
-                    break;
-
-                case "/saveNote":
-                    noteService.addNote(chatId, update, note);
-                    message.setChatId(chatId).setText("Успешно");
-                    try {
-                        execute(message);
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                    noteService.addNote(chatId, update, note);
-                    userService.setDefaultCallBack(chatId, update);
-
-                    try {
-                        execute(Keyboard.mainKeyboard(chatId));
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                    break;
 
                 case "/delete":
-                    title = update.getMessage().getText();
                     try {
-                        noteService.deleteNoteByTitle(chatId, update, title);
+                        noteService.deleteNoteByTitle(chatId, update, update.getMessage().getText());
                         message.setChatId(chatId).setText("Напоминалка успешно удалена");
                     } catch (Exception e) {
                         message.setChatId(chatId).setText("Напоминалка с таким названием не найдена");
@@ -154,12 +132,13 @@ public class Bot extends TelegramLongPollingBot {
                     break;
 
                 case "/create":
-                    userService.updateLastCommand(chatId, update);
                     try {
-                        execute(Keyboard.defaultKeyboard(chatId));
+                        execute(Keyboard.defaultKeyboard(chatId, "Создаём новую напоминалку \nВведите название напоминалки:"));
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
+                    //next step check in logic command path
+                    userService.setCustomCallBack(chatId, update, "/createTitle");
                     break;
 
                 case "/check":
@@ -172,7 +151,7 @@ public class Bot extends TelegramLongPollingBot {
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
-                    //Отсылаем все notes
+
                     for (Note note : list) {
                         message.setChatId(chatId).setText(note.toString());
                         try {
@@ -205,6 +184,24 @@ public class Bot extends TelegramLongPollingBot {
                     }
                     break;
 
+                //Flag keyboard
+                case "/saveNote":
+                    noteService.addNote(chatId, update, note);
+                    message.setChatId(chatId).setText("Напоминалка успешно добавлена");
+
+                    try {
+                        execute(message);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    userService.setDefaultCallBack(chatId, update);
+
+                    try {
+                        execute(Keyboard.mainKeyboard(chatId));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    break;
             }
         }
     }
