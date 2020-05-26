@@ -84,7 +84,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public String getLastCommand(long id, Update update) {
+    public String getLastCommandAsCallBack(long id, Update update) {
         Session session = HibernateConfig.getSessionFactory().openSession();
 
         Query query = session.createQuery("from User user where user.id=:i");

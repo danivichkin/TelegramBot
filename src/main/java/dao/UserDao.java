@@ -9,6 +9,6 @@ public interface UserDao {
     void setDefaultCallBack(long id, Update update);
     void setCustomCallBack(long id, Update update, String customCallBack);
     User getUserById(long id, Update update);
-    String getLastCommand(long id, Update update);
+    String getLastCommandAsCallBack(long id, Update update);
 
 }

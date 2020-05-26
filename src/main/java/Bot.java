@@ -8,6 +8,7 @@ import service.Keyboard;
 import service.NoteService;
 import service.UserService;
 
+import java.sql.Date;
 import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
@@ -33,7 +34,7 @@ public class Bot extends TelegramLongPollingBot {
             }
 
             long chatId = update.getMessage().getChatId();
-            String lastCommand = userService.getLastCommand(chatId, update);
+            String lastCommand = userService.getLastCommandAsCallBack(chatId, update);
 
             //Логика комманд (диалог)
             switch (lastCommand) {
@@ -51,8 +52,28 @@ public class Bot extends TelegramLongPollingBot {
 
                 case "/createDescription":
                     note.setDescription(update.getMessage().getText());
-//                    userService.setCustomCallBack(chatId, update, "/checkNoteBeforeSave");
+                    userService.setCustomCallBack(chatId, update, "/createDate");
 
+                    try {
+                        execute(Keyboard.hourKeyboard(chatId, "Установим час напоминания:"));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+
+
+                case "/createDate":
+                    Date date = Date.valueOf(update.getMessage().getText());
+                    note.setDate(date);
+
+                    message.setChatId(chatId).setText("Напоминалка успешно создана");
+                    try {
+                        execute(message);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+
+                    //----------------------------------------
                     try {
                         execute(message.setChatId(chatId).setText("Проверим напоминалку: "));
                     } catch (TelegramApiException e) {
@@ -73,27 +94,6 @@ public class Bot extends TelegramLongPollingBot {
                     }
                     break;
 
-/*
-                case "/createData":
-                    message.setChatId(chatId).setText("Когда напомнить?");
-
-                    try {
-                        execute(message);
-                        execute(Keyboard.defaultKeyboard(chatId));
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                    Date date = Date.valueOf(update.getMessage().getText());
-                    note.setDate(date);
-
-                    message.setChatId(chatId).setText("Напоминалка успешно создана");
-                    try {
-                        execute(message);
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-*/
 
 
                 case "/delete":
@@ -201,6 +201,15 @@ public class Bot extends TelegramLongPollingBot {
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
+                    break;
+
+                case "/setHour":
+                    try {
+                        execute(Keyboard.minuteKeyboard(chatId, "Установите минуту"));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    userService.updateLastCommand(chatId, update);
                     break;
             }
         }

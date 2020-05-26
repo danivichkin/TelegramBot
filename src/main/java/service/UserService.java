@@ -24,6 +24,6 @@ public class UserService {
 
     public User getUserById(long id, Update update) {return userDaoImpl.getUserById(id, update);}
 
-    public String getLastCommand(long id, Update update) { return userDaoImpl.getLastCommand(id, update); }
+    public String getLastCommandAsCallBack(long id, Update update) { return userDaoImpl.getLastCommandAsCallBack(id, update); }
 
 }
